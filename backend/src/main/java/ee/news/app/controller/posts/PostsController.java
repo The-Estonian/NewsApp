@@ -1,6 +1,5 @@
 package ee.news.app.controller.posts;
 
-import ee.news.app.persistence.posts.Posts;
 import ee.news.app.service.posts.PostsService;
 import ee.news.app.service.posts.dto.AddPostDto;
 import ee.news.app.service.posts.dto.PostsDto;
