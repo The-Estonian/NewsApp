@@ -30,10 +30,13 @@ export const loginUser = async (data: Record<string, any>) =>
   });
 
 // Posts
-export const newPost = async (formData: FormData) =>
-  await fetch(`${API_URL}api/v1/posts`, {
+export const newPost = async (data: { [key: string]: any }) =>
+  await fetch(`${API_URL}api/v1/posts/add`, {
     method: 'POST',
-    body: formData,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
     credentials: 'include',
   });
 
