@@ -2,22 +2,30 @@ import { useEffect, useState } from 'react';
 import Login from './components/Login/Login';
 import Posts from './components/Posts/Posts';
 import { status, logOut } from './components/connection/backend';
+import type { UserData } from './types';
 
 import styles from './App.module.css';
 import Register from './components/Register/Register';
+import Profile from './components/Profile/Profile';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [loginOrRegister, setLoginOrRegister] = useState(true);
   const [hideLogin, setHideLogin] = useState(true);
   const [userMessage, setUserMessage] = useState('');
+  const [userData, setUserData] = useState<UserData | null>(null);
 
   useEffect(() => {
     const checkStatus = async () => {
       const response = await status();
       const data = await response.json();
+
       if (data.authenticated == true) {
         setLoggedIn(true);
+        setUserData({
+          username: data.username,
+          email: data.email,
+        });
       } else {
         setLoggedIn(false);
       }
@@ -40,7 +48,6 @@ function App() {
     setLoginOrRegister(!loginOrRegister);
   };
 
-
   return (
     <div className={styles.container}>
       {!loggedIn && loginOrRegister && (
@@ -48,6 +55,7 @@ function App() {
           setAuthenticated={setAuthenticated}
           setHideLogin={setHideLogin}
           setUserMessage={setUserMessage}
+          setUserData={setUserData}
         />
       )}
       {!loggedIn && !loginOrRegister && (
@@ -75,6 +83,7 @@ function App() {
           Logout
         </span>
       )}
+      {loggedIn && <Profile userData={userData} />}
     </div>
   );
 }

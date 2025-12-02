@@ -1,6 +1,4 @@
-export interface Sector {
-  id: number;
-  categoryName: string;
-  parentSector: Sector;
-  value: number;
-}
+export interface UserData{
+  username: string;
+  email: string;
+};
