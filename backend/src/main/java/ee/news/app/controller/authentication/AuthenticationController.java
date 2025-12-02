@@ -1,5 +1,7 @@
 package ee.news.app.controller.authentication;
 
+import ee.news.app.persistence.user.User;
+import ee.news.app.persistence.user.UserRepository;
 import ee.news.app.service.user.dto.LoginDto;
 import ee.news.app.service.user.dto.LoginResponseDto;
 import ee.news.app.service.user.dto.RegistrationDto;
@@ -16,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/api/v1")
@@ -24,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
 
     private final UserService userService;
+    private final UserRepository userRepository;
 
     @PostMapping("/register")
     @Operation(summary = "Registration. Returns userId and roleName", description = """
@@ -70,6 +74,13 @@ public class AuthenticationController {
         StatusDto status = new StatusDto();
 
         if (isAuthenticated) {
+            UserDetails userDetails = (UserDetails) auth.getPrincipal();
+
+            String username = userDetails.getUsername();
+            status.setUsername(userDetails.getUsername());
+            User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
+
+            status.setEmail(user.getEmail());
             status.setAuthenticated(true);
             status.setMessage("Session is active.");
             return status;

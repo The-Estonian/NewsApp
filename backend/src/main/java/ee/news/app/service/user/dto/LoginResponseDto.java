@@ -16,4 +16,10 @@ public class LoginResponseDto implements Serializable {
     private String roleName;
     private String token;
     private String refreshToken;
+
+    @NotNull
+    private String username;
+
+    @NotNull
+    private String email;
 }

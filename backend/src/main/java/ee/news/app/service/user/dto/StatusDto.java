@@ -15,4 +15,10 @@ public class StatusDto implements Serializable {
     @Size(max = 20)
     @NotNull
     private String message;
+
+    @NotNull
+    private String username;
+
+    @NotNull
+    private String email;
 }
