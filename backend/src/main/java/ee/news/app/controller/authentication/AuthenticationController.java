@@ -12,6 +12,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,7 +30,7 @@ public class AuthenticationController {
             A new user is created in the system.
             If the username already exists, an error with error code 409 (CONFLICT) is thrown.""")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK"), @ApiResponse(responseCode = "409", description = "Username already exists")})
-    public String userRegistration(@RequestBody RegistrationDto registrationDto) {
+    public ResponseEntity<?> userRegistration(@RequestBody RegistrationDto registrationDto) {
         return userService.register(registrationDto);
     }
 

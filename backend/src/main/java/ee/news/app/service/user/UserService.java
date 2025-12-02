@@ -1,6 +1,8 @@
 package ee.news.app.service.user;
 
+import ee.news.app.infrastructure.exception.EmailExistsException;
 import ee.news.app.infrastructure.exception.InvalidCredentialsException;
+import ee.news.app.infrastructure.exception.UsernameExistsException;
 import ee.news.app.persistence.role.Role;
 import ee.news.app.persistence.role.RoleRepository;
 import ee.news.app.persistence.user.User;
@@ -10,9 +12,13 @@ import ee.news.app.service.user.dto.LoginDto;
 import ee.news.app.service.user.dto.LoginResponseDto;
 import ee.news.app.service.user.dto.RegistrationDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -24,12 +30,14 @@ public class UserService {
     private final JwtUtil jwtUtil;
 
 
-    public String register(RegistrationDto registrationDto) {
+    public ResponseEntity<?> register(RegistrationDto registrationDto) {
         if (userRepository.existsBy(registrationDto.getUsername())) {
-            return "Username already in use!";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new UsernameExistsException("Username already exists"));
         }
         if (userRepository.existsBy(registrationDto.getEmail())) {
-            return "Email already in use!";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new EmailExistsException("Email already exists"));
         }
 
         User newUser = userMapper.registrationToUser(registrationDto);
@@ -38,7 +46,7 @@ public class UserService {
         newUser.setStatus("A");
         userRepository.save(newUser);
 
-        return "Registration success!";
+        return ResponseEntity.ok(Map.of("message", "User registered successfully"));
     }
 
     public LoginResponseDto login(LoginDto loginDto) {
