@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react';
-import { getPosts, deletePost, newPost } from '../connection/backend';
+import {
+  getPosts,
+  deletePost,
+  newPost,
+  updatePost,
+} from '../connection/backend';
 import Loader from '../Loader/Loader';
 
 import styles from './Posts.module.css';
@@ -8,9 +13,11 @@ const Posts = () => {
   const [posts, setPosts] = useState([]);
   const [newTitleToSend, setNewTitleToSend] = useState('');
   const [newPostToSend, setNewPostToSend] = useState('');
+  const [updatePostId, setUpdatePostId] = useState('');
   const [loading, setLoading] = useState(false);
   const [showError, setShowError] = useState(false);
   const [error, setError] = useState('');
+  const [showUpdate, setShowUpdate] = useState(true);
 
   const fetchPosts = async () => {
     const response = await getPosts();
@@ -56,6 +63,36 @@ const Posts = () => {
     }
   };
 
+  const handleEdit = (post: { id: string; title: string; post: string }) => {
+    setShowUpdate(false);
+    setUpdatePostId(post.id);
+    setNewTitleToSend(post.title);
+    setNewPostToSend(post.post);
+    setShowUpdate(false);
+  };
+
+  const handleUpdatePost = async () => {
+    const newData = {
+      title: newTitleToSend,
+      post: newPostToSend,
+    };
+    const response = await updatePost(newData, updatePostId);
+    console.log(response);
+    
+    if (response.ok) {
+      setUpdatePostId('');
+      setNewTitleToSend('');
+      setNewPostToSend('');
+      fetchPosts();
+    }
+  };
+
+  const cancelEdit = () => {
+    setShowUpdate(true);
+    setNewTitleToSend('');
+    setNewPostToSend('');
+  };
+
   return (
     <div className={styles.postsContainer}>
       {showError && <p>{error}</p>}
@@ -66,6 +103,9 @@ const Posts = () => {
           <div key={eachPost.id} className={styles.post}>
             <span className={styles.post_title}>{eachPost.title}</span>
             <span className={styles.post_post}>{eachPost.post}</span>
+            <div className={styles.editPost}>
+              <span onClick={() => handleEdit(eachPost)}>Edit</span>
+            </div>
             <div className={styles.deletePost}>
               <span onClick={() => handleDelete(eachPost.id)}>X</span>
             </div>
@@ -77,19 +117,28 @@ const Posts = () => {
           <input
             onChange={handleNewTitleInput}
             type='text'
-            name='newTitle'
-            id='newTitle'
+            value={newTitleToSend}
           />
           <span>Post</span>
           <input
             onChange={handleNewPostInput}
             type='text'
-            name='newPost'
-            id='newPost'
+            value={newPostToSend}
           />
-          <span className={styles.sendPost} onClick={handleNewPost}>
-            Send
-          </span>
+          {showUpdate ? (
+            <span className={styles.sendPost} onClick={handleNewPost}>
+              Send
+            </span>
+          ) : (
+            <div className={styles.editPostOptions}>
+              <span className={styles.sendPost} onClick={handleUpdatePost}>
+                Update
+              </span>
+              <span className={styles.sendPost} onClick={cancelEdit}>
+                Cancel
+              </span>
+            </div>
+          )}
         </div>
       )}
     </div>

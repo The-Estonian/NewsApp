@@ -55,3 +55,13 @@ export const deletePost = async (id: string) =>
     method: 'DELETE',
     credentials: 'include',
   });
+
+export const updatePost = async (data: { [key: string]: any }, id: string) =>
+  await fetch(`${API_URL}api/v1/posts/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+    credentials: 'include',
+  });
