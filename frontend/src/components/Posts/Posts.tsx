@@ -22,8 +22,6 @@ const Posts = () => {
       setLoading(false);
       return;
     }
-    console.log(data);
-
     setPosts(data);
   };
 

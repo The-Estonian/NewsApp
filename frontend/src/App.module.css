@@ -26,3 +26,18 @@
   color: black;
   border-radius: 5px;
 }
+
+.loginRegister {
+  color: white;
+  cursor: pointer;
+}
+
+.loginRegister:hover {
+  text-decoration: underline;
+  text-decoration-color: rgb(168, 202, 17);
+  text-decoration-thickness: 2px;
+}
+
+.message {
+  color: rgb(85, 255, 85);
+}

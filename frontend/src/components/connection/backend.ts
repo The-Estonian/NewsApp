@@ -13,9 +13,13 @@ export const logOut = async () =>
     credentials: 'include',
   });
 
-export const registerUser = async () =>
+export const registerUser = async (data: { [key: string]: any }) =>
   await fetch(`${API_URL}api/v1/register`, {
     method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
     credentials: 'include',
   });
 

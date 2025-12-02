@@ -1,22 +1,23 @@
 import { useState } from 'react';
 
-import { loginUser } from '../connection/backend';
+import { registerUser } from '../connection/backend';
 import Loader from '../Loader/Loader';
-import styles from './Login.module.css';
+import styles from './Register.module.css';
 
-type LoginProps = {
-  setAuthenticated: () => void;
+type RegisterProps = {
+  handleLoginOrRegister: () => void;
   setHideLogin: (b: boolean) => void;
   setUserMessage: (message: string) => void;
 };
 
-const Login = ({
-  setAuthenticated,
+const Register = ({
+  handleLoginOrRegister,
   setHideLogin,
   setUserMessage,
-}: LoginProps) => {
+}: RegisterProps) => {
   const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showError, setShowError] = useState(false);
   const [error, setError] = useState('');
@@ -25,49 +26,57 @@ const Login = ({
     setUsername(e.target.value);
   };
 
+  const emailHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
+
   const passwordHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
 
-  const handleLogin = async () => {
+  const handleRegister = async () => {
     setLoading(true);
     setHideLogin(false);
     setShowError(false);
     setUserMessage('');
     try {
-      const response = await loginUser({
+      const response = await registerUser({
         username,
         password,
+        email,
       });
 
       const data = await response.json();
+      setUserMessage(data.message + '! Please login');
 
       if (!response.ok || (data.status && data.status !== 200)) {
-        setError(data.message || 'Login failed');
+        setError(data.message || 'Register failed');
         setShowError(true);
         setLoading(false);
         setHideLogin(true);
-        setUserMessage("");
+        setUserMessage('');
         return;
       }
-      setAuthenticated();
+      handleLoginOrRegister();
+      setHideLogin(true);
     } catch (error: any) {
       setError(error.message || 'Unexpected error');
       setShowError(true);
-      setHideLogin(false);
     } finally {
       setLoading(false);
     }
   };
   return (
-    <div className={styles.loginContainer}>
+    <div className={styles.registerContainer}>
       {!loading && (
-        <div className={styles.loginInput}>
+        <div className={styles.registerInput}>
           <span>Username</span>
           <input type='text' value={username} onChange={usernameHandler} />
+          <span>Email</span>
+          <input type='email' value={email} onChange={emailHandler} />
           <span>Password</span>
           <input type='password' value={password} onChange={passwordHandler} />
-          <button onClick={handleLogin}>Login</button>
+          <button onClick={handleRegister}>Register</button>
         </div>
       )}
       {showError && <p className={styles.error}>{error}</p>}
@@ -76,4 +85,4 @@ const Login = ({
   );
 };
 
-export default Login;
+export default Register;
