@@ -2,6 +2,7 @@ package ee.news.app.service.user;
 
 import ee.news.app.infrastructure.exception.EmailExistsException;
 import ee.news.app.infrastructure.exception.InvalidCredentialsException;
+import ee.news.app.infrastructure.exception.ResourceNotFoundException;
 import ee.news.app.infrastructure.exception.UsernameExistsException;
 import ee.news.app.persistence.role.Role;
 import ee.news.app.persistence.role.RoleRepository;
@@ -50,7 +51,7 @@ public class UserService {
     }
 
     public LoginResponseDto login(LoginDto loginDto) {
-        User loginUser = userRepository.findByUsername(loginDto.getUsername()).orElseThrow(() -> new InvalidCredentialsException("No such user exists!"));
+        User loginUser = userRepository.findByUsername(loginDto.getUsername()).orElseThrow(() -> new ResourceNotFoundException("No such user exists!"));
 
         if (!passwordEncoder.matches(loginDto.getPassword(), loginUser.getPassword())) {
             throw new InvalidCredentialsException("Password does not match");

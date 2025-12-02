@@ -33,6 +33,13 @@ public class PostsController {
         return postsService.newPost(addPostDto);
     }
 
+    @PutMapping("/posts/{id}")
+    @Operation(summary = "Returns list of all posts", description = "If there are no posts, returns an empty array")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
+    public PostsDto newPosts(@PathVariable("id") Integer id, @RequestBody AddPostDto updatePostDto) {
+        return postsService.updatePost(id, updatePostDto);
+    }
+
     @DeleteMapping("/posts/{id}")
     @Operation(summary = "Deletes post", description = "Deletes the post by ID")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})

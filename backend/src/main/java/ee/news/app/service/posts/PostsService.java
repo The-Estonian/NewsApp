@@ -1,5 +1,6 @@
 package ee.news.app.service.posts;
 
+import ee.news.app.infrastructure.exception.ResourceNotFoundException;
 import ee.news.app.persistence.posts.Posts;
 import ee.news.app.persistence.posts.PostsRepository;
 import ee.news.app.persistence.user.User;
@@ -43,5 +44,15 @@ public class PostsService {
 
     public void deletePost(Integer id) {
         postsRepository.deleteById(id);
+    }
+
+    public PostsDto updatePost(Integer id, AddPostDto addPostDto) {
+        Posts post = postsRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Post does not exist!"));
+        post.setTitle(addPostDto.getTitle());
+        post.setPost(addPostDto.getPost());
+
+        postsRepository.save(post);
+
+        return postsMapper.toDto(post);
     }
 }
