@@ -68,7 +68,6 @@ const Posts = () => {
     setUpdatePostId(post.id);
     setNewTitleToSend(post.title);
     setNewPostToSend(post.post);
-    setShowUpdate(false);
   };
 
   const handleUpdatePost = async () => {
@@ -78,11 +77,12 @@ const Posts = () => {
     };
     const response = await updatePost(newData, updatePostId);
     console.log(response);
-    
+
     if (response.ok) {
       setUpdatePostId('');
       setNewTitleToSend('');
       setNewPostToSend('');
+      setShowUpdate(true);
       fetchPosts();
     }
   };

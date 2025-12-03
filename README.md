@@ -44,6 +44,9 @@ Api documentation by Swagger.
 
 Here's a screenshot of the project:
 
-![Project Screenshot](screenshots/asd.jpg)
+![Project Screenshot](screenshots/login.jpg)
+![Project Screenshot](screenshots/Posts.jpg)
+![Project Screenshot](screenshots/swagger.jpg)
+![Project Screenshot](screenshots/news_diagram.jpg)
 
 _Author: [Jaanus Saar](https://www.the-estonian.com)_
