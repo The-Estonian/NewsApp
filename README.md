@@ -11,23 +11,14 @@
 #### Prerequisites
 
 - Java 21 installed
-- Node.js and npm installed
 - Docker
 
 ## How to run the project
 
-Run the Postgres database via
+Run the Database and Frontend:
 
 ```bash
-docker run --name newsDB -e POSTGRES_DB=news -e POSTGRES_PASSWORD=randomPassword -p 5555:5432 -d postgres
-```
-
-Run the frontend with
-
-```bash
-cd frontend
-npm install
-npm run dev
+docker-compose up
 ```
 
 Run the backend with
@@ -44,9 +35,9 @@ Api documentation by Swagger.
 
 Here's a screenshot of the project:
 
-![Project Screenshot](screenshots/login.jpg)
-![Project Screenshot](screenshots/Posts.jpg)
-![Project Screenshot](screenshots/swagger.jpg)
-![Project Screenshot](screenshots/news_diagram.jpg)
+<img src="screenshots/login.jpg" alt="Project login screenshot" width="1000">
+<img src="screenshots/Posts.jpg" alt="Project posts screenshot" width="1000">
+<img src="screenshots/swagger.jpg" alt="Project swagger screenshot" width="1000">
+<img src="screenshots/news_diagram.jpg" alt="Project SQL diagram screenshot" width="1000">
 
 _Author: [Jaanus Saar](https://www.the-estonian.com)_
